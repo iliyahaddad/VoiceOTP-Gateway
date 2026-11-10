@@ -1,0 +1,15 @@
+; VoiceOTP Gateway - AMI user definition
+; File: voiceotp_ami.conf
+; Install into the manager custom include directory (e.g. manager_custom.conf
+; or a dedicated file included by manager.conf) and reload with
+; "manager reload".
+;
+; This user is dedicated to VoiceOTP and must NOT reuse the HTTP API password.
+
+[voiceotp_ami]
+secret = CHANGE_ME_HIGH_ENTROPY_SECRET
+deny = 0.0.0.0/0.0.0.0
+permit = 127.0.0.1/255.255.255.255
+read = command,originate
+write = command,originate
+eventfilter = !*

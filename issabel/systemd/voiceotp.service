@@ -1,0 +1,27 @@
+[Unit]
+Description=VoiceOTP Gateway - voice-based OTP delivery service
+After=network.target asterisk.service
+Wants=network.target
+
+[Service]
+Type=simple
+User=voiceotp
+Group=voiceotp
+ExecStart=/usr/local/bin/voiceotp-gateway /etc/voiceotp/config.json
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=control-group
+KillSignal=SIGTERM
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+WorkingDirectory=/var/lib/voiceotp
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/log/voiceotp /var/run/voiceotp
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+[Install]
+WantedBy=multi-user.target

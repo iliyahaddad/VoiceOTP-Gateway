@@ -1,0 +1,40 @@
+{
+  "server": {
+    "listen": "127.0.0.1:8443",
+    "tls_enabled": true,
+    "tls_cert": "/etc/voiceotp/tls/server.crt",
+    "tls_key": "/etc/voiceotp/tls/server.key",
+    "read_timeout_seconds": 5,
+    "write_timeout_seconds": 10
+  },
+  "api": {
+    "username": "voiceotp_api",
+    "password": "REPLACE_WITH_HIGH_ENTROPY_SECRET",
+    "otp_min_length": 4,
+    "otp_max_length": 8,
+    "max_request_body_bytes": 4096
+  },
+  "ami": {
+    "host": "127.0.0.1",
+    "port": 5038,
+    "username": "voiceotp_ami",
+    "secret": "REPLACE_WITH_HIGH_ENTROPY_AMI_SECRET",
+    "timeout_seconds": 3
+  },
+  "asterisk": {
+    "channel_driver": "pjsip",
+    "trunk_name": "YOUR_TRUNK",
+    "dial_format": "PJSIP/YOUR_TRUNK/%s",
+    "context": "voiceotp-playback",
+    "caller_id": "VoiceOTP <1000>",
+    "language": "en",
+    "call_timeout_ms": 30000
+  },
+  "security": {
+    "allowed_client_cidrs": [
+      "127.0.0.1/32"
+    ],
+    "max_requests_per_minute": 10,
+    "max_concurrent_calls": 5
+  }
+}

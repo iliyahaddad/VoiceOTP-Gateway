@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+      - name: Build gateway
+        run: cd issabel/gateway && go build ./...
+      - name: Vet gateway
+        run: cd issabel/gateway && go vet ./...
+      - name: Test gateway
+        run: cd issabel/gateway && go test ./... -timeout 60s
+      - name: Cross-compile static Linux binary
+        run: cd issabel/gateway && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /tmp/voiceotp-gateway .
+
+  php:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint PHP files
+        run: |
+          for f in $(find wordpress -name '*.php'); do php -l "$f"; done
+
+  shell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shell syntax check
+        run: |
+          for f in issabel/scripts/*.sh; do bash -n "$f"; done
